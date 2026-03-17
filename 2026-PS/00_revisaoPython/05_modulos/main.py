@@ -71,4 +71,8 @@ def menu_massa():
         print("Entrada inválida! Por favor, insira um número válido.")
         return
     
+<<<<<<< HEAD
     print(formatar_resultado("lb → kg", valor_libras, "lb", libras_para_kg(valor_libras), "kg"))
+=======
+    print(formatar_resultado("lb → kg", valor_libras, "lb", libras_para_kg(valor_libras), "kg"))
+>>>>>>> 9c4056d63b258e0c60993058317564b16dca232b
