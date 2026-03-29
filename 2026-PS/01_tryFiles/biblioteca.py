@@ -144,8 +144,6 @@ def menu():
             funcao()
 
         finally:
-            # Executa SEMPRE - com ou sem exceção
-            # Aqui: didático. Em produção: fecha arquivos, conexões, etc.
             pass
 
 
