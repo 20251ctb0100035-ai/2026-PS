@@ -1,9 +1,1 @@
-Resultado: 5
-Resultado: 4
-Resultado: 6
-Resultado: 5
-Resultado: 4
-Resultado: 5
-Resultado: 8
-Resultado: 5
-Resultado: 7
+
