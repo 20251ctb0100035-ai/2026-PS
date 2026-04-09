@@ -1,5 +1,6 @@
 # ------------------------------------------------
 # Meme Gambling 
+# Jogo de azar onde o usuário pode ganhar memes ou perder, dependendo da combinação de símbolos sorteados.
 # ================================================
 # DISCIPLINA : Programação de sistemas (PS)
 # AULA       : Mini-Projeto
@@ -7,10 +8,11 @@
 # Data       : [29/03/2026]
 # ================================================
 
-
 import random
-
-ARQUIVO = "dados.txt"
+import os
+#Criara a pasta dados.txt dentro da pasta para evitar problemo no caminho
+PASTA_ATUAL = os.path.dirname(os.path.abspath(__file__))
+ARQUIVO = os.path.join(PASTA_ATUAL, "dados.txt")
 SEPARADOR = "|"
 
 # Carregar histórico Ajustado para ler e mostrar o conteúdo do arquivo
@@ -29,23 +31,29 @@ def load():
 def salvar(resultado):
     try:
         with open(ARQUIVO, "a", encoding="utf-8") as f:
-            f.write(f"Resultado: {resultado}\n")
+            f.write(f"{resultado}\n")
     except Exception as e:
         print(f"Erro ao salvar o resultado: {e}")
 
 # Verificar ganha
-def verificar_ganha(valor):     # Verifica se o valor é 3, 6 ou 9 e retorna o meme correspondente
-    if valor == 3:
+def verificar_ganha(Sequence):    
+    if Sequence == ("🍋", "🍋", "🍋"):
         return "Meme: https://youtu.be/97JDCEN80yM?si=nTk9HUXRTsgenyXi"
-    elif valor == 6:
+    elif Sequence == ("🍒", "🍒", "🍒"):
         return "Meme: https://youtu.be/daFzNfSK3b4?si=Vv3J3rFxE2i9VCZA"
-    elif valor == 9:
+    elif Sequence == ("🔔", "🔔", "🔔"):
         return "Meme: https://youtu.be/dQw4w9WgXcQ?si=im3qezEJO_Mwh7to"
     else:
         return "Droga..."
 
 # Entrada
 def Leia():         # Loop principal do jogo, onde o usuário pode escolher entre girar ou sair
+    user_input = input("Digite seu nome antes de começar: ")
+    print(f"Bem vindo {user_input}! Vamos jogar Meme Gambling!")
+
+    jackpot = 0
+    falhas = 0
+
     while True:
         print("\n--- Meme Gambling ---")
         print("R - Girar")
@@ -54,21 +62,24 @@ def Leia():         # Loop principal do jogo, onde o usuário pode escolher entr
         opcao = input("Escolha uma opção: ").upper()
         
         if opcao == 'R':
-            A = random.randint(1, 3)        # Gera números aleatórios entre 1 e 3
-            B = random.randint(1, 3)
-            C = random.randint(1, 3)
-            print(f"Número sorteado: {A}")
-            print(f"Número sorteado: {B}")
-            print(f"Número sorteado: {C}")
+            A = random.choice(["🍋", "🍒", "🔔"])    
+            B = random.choice(["🍋", "🍒", "🔔"])
+            C = random.choice(["🍋", "🍒", "🔔"])
+            print(f"Simbolo sorteado: {A}")
+            print(f"Simbolo sorteado: {B}")
+            print(f"Simbolo sorteado: {C}")
             
-            resultado = Soma(A, B, C)       # Calcula a soma dos números sorteados
-            Escreva("Soma", resultado)
+            resultado = Sequence(A, B, C)       
+            Escreva("Sequencia", resultado)
             
-            answer = A + B + C          # Calcula a soma dos números sorteados
-            if answer == 3 or answer == 6 or answer == 9:
-                print("Parabéns, você acertou o número!")
+            answer = A, B, C          
+            if answer == ("🍋", "🍋", "🍋") or answer == ("🍒", "🍒", "🍒") or answer == ("🔔", "🔔", "🔔"):
+                print("JACKPOT!")
+                jackpot += 1
             else:
                 print("Que pena, tente novamente!")
+                falhas += 1
+            
             
             memes = verificar_ganha(answer)
             print("MEME SORTEADA:", memes)
@@ -77,11 +88,15 @@ def Leia():         # Loop principal do jogo, onde o usuário pode escolher entr
             salvar(resultado)
             
         elif opcao == 'SAIR':       # Se o usuário escolher sair, o loop é encerrado e uma mensagem de despedida é exibida
-            print("Saindo do jogo. Até a próxima!")
+            print(f"Volte sempre! Até a próxima, {user_input}!")
+            if jackpot > falhas:
+                print("Parabéns, você gastou toda a sua sorte com memes, vocé é sortudo!")
+            else:
+                print("Infelizmente você não adquirio nada, mas você não gastou toda sua sorte com isso tmb...")
             break
 
-def Soma(A, B, C):
-    return (A + B + C)
+def Sequence(A, B, C):
+    return A, B, C
 
 # Saída
 def Escreva(msg, resultado):
