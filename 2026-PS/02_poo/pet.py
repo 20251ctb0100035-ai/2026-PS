@@ -13,14 +13,14 @@ class Pet:
     dentro de uma classe.
     """
 
-    def __init__(self, nome, especie, idade, peso, nome_dono, vacinado):
+    def __init__(self, nome, nome_funcionario, especie, idade, peso, nome_dono, telefone_dono, vacinado):
         """
         Método construtor.
 
         Ele é executado automaticamente quando criamos um novo objeto Pet.
 
         Exemplo:
-        pet1 = Pet("Rex", "Cachorro", 5, 10.0, True, "João")
+        pet1 = Pet("Rex", "Cachorro", 5, 10.0, "João", "123456789", True)
 
         Parâmetros:
         - nome: nome do pet
@@ -28,15 +28,18 @@ class Pet:
         - idade: idade do pet
         - peso: peso do pet
         - nome_dono: nome do dono do pet
+        - telefone_dono: telefone do dono do pet
         - vacinado: indica se o pet está vacinado
         """
 
         self.nome = nome
+        self.nome_funcionario = nome_funcionario
         self.especie = especie
         self.idade = idade
         self.hospedado = False
         self.peso = peso
         self.nome_dono = nome_dono
+        self.telefone_dono = telefone_dono
         self.vacinado = vacinado
         # =====================================================
         # ATIVIDADE 1:
@@ -70,11 +73,11 @@ class Pet:
         print(f"Nome: {self.nome}")
         print(f"Espécie: {self.especie}")
         print(f"Idade: {self.idade}")
-        print(f"Hospedado: {'Sim' if self.hospedado == False  else 'Não' == True}")
-        if self.hospedado == False:
+        print(f"Hospedado: {'Sim' if self.hospedado else 'Não'}")
+        if self.hospedado:
             print("Pet está hospedado.") 
         else:
-            print("Pet não está hospedado.") == True
+            print("Pet não está hospedado.")
 
     def registrar_entrada(self):
         """
@@ -87,12 +90,11 @@ class Pet:
         Melhore este método para verificar se o pet já está hospedado.
         Se já estiver, mostre uma mensagem avisando.
         """
-    def registrar_entrada(self):
-        if self.hospedado:
-            self.hospedado = True
-            print(f"{self.nome} Não esta hospedado.")
+        if self.hospedado == True:
+            print(f"{self.nome} já está hospedado.")
         else:
-            print(f"{self.nome} esta hospedado.")
+            self.hospedado = True
+            print(f"{self.nome} foi hospedado.")
 
     def registrar_saida(self):
         """
@@ -104,9 +106,11 @@ class Pet:
         Melhore este método para verificar se o pet realmente está hospedado.
         Se não estiver, mostre uma mensagem avisando.
         """
-
-        self.hospedado = False
-        print(f"{self.nome} saiu do hotel.")
+        if self.hospedado:
+            self.hospedado = False
+            print(f"{self.nome} saiu do hotel.")
+        else:
+            print(f"{self.nome} não estava hospedado.")
 
     def calcular_diaria(self):
         """
@@ -163,8 +167,9 @@ class Pet:
         """
 
         # Escreva seu código aqui
-        self.peso = novo_peso
-        print(f"O peso de {self.nome} foi atualizado para {self.peso} kg.")
+        peso_anterior = self.peso
+        self.peso += novo_peso
+        print(f"O peso de {self.nome} foi atualizado de {peso_anterior} kg para {self.peso} kg.")
 
     def emitir_resumo(self):
         """
@@ -188,9 +193,11 @@ class Pet:
         # Escreva seu código aqui
         resumo = f"""--- Resumo do Pet ---
     Nome: {self.nome}
+    Nome do funcionário responsável: {self.nome_funcionario}
     Espécie: {self.especie}
     Idade: {self.idade} anos
     Nome do dono: {self.nome_dono}
+    telefone do dono: {self.telefone_dono}
     Peso: {self.peso} kg
     Status de vacinação: {'Vacinado' if self.vacinado else 'Pendente'}
     Status de hospedagem: {'Hospedado' if self.hospedado else 'Não hospedado'}
@@ -211,18 +218,22 @@ class Pet:
 # ============================================================
 
 Lista_dos_pets: list[Pet] = []
-pet1 = Pet("Rex", "Cachorro", 5, 22.5, "Maria", True)
-pet2 = Pet("Mimi", "Gato", 2, 4.2, "João", True)
-pet3 = Pet("Thor", "Cachorro", 11, 18.0, "Ana", False)
-pet4 = Pet("Luna", "Gato", 7, 5.5, "Maria", True)
-pet5 = Pet("Bella", "Cachorro", 4, 8.0, "Carlos", False)
+pet1 = Pet("Rex", "João", "Cachorro", 5, 22.5, "Maria", "987654321", True)
+pet2 = Pet("Mimi", "Maria", "Gato", 2, 4.2, "João", "123456789", True)
+pet3 = Pet("Thor", "Carlos", "Cachorro", 11, 18.0, "Ana", "555555555", False)
+pet4 = Pet("Luna", "Ana", "Gato", 7, 5.5, "Maria", "999999999", True)
+pet5 = Pet("Bella", "João", "Cachorro", 4, 8.0, "Carlos", "777777777", False)
 Lista_dos_pets.extend([pet1, pet2, pet3, pet4, pet5])
 
 for pet in Lista_dos_pets:
     pet.exibir_dados()
     pet.registrar_entrada()
+    pet.registrar_saida()
+    pet.calcular_diaria()
     pet.verificar_vacinacao()
+    pet.atualizar_peso(1.5)
     pet.emitir_resumo()
+    
 
 # ============================================================
 # ATIVIDADE FINAL:
