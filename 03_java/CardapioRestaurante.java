@@ -22,8 +22,6 @@ public class CardapioRestaurante { // Em Java, se a classe for pública, o nome 
         System.out.print("Quantos itens você deseja escolher? ");
         int quantidade = entrada.nextInt();
 
-        for (int i = 1; i <= quantidade; i++) {
-            System.out.print("Escolha a opção do item " + i + ": ");
             int opcao = entrada.nextInt();
 
             if (opcao == 1) {
