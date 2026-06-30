@@ -97,6 +97,7 @@ def carregar_pets():
     if not os.path.exists(ARQUIVO_JSON):
         return []
 
+try:
     with open(ARQUIVO_JSON, "r", encoding="utf-8") as arquivo:
         lista_dicionarios = json.load(arquivo)
 
@@ -108,6 +109,9 @@ def carregar_pets():
 
     return lista_pets
 
+except json.JSONDecodeError:
+    print("Error")
+    return[]
 
 def cadastrar_pet(lista_pets):
     print("\n--- Cadastro de Pet ---")
@@ -160,13 +164,30 @@ def menu():
 
         elif opcao == "3":
             listar_pets(pets)
+
+        try:
             numero = int(input("Número do pet: "))
-            pets[numero - 1].registrar_entrada()
+
+            if 1 <= numer <= len(pets):
+                pets[numero - 1].registrar_entrada()
+            else:
+                 print("Numero invalido")
+        except ValueError:
+            print("Digite apenas números.")
 
         elif opcao == "4":
             listar_pets(pets)
+
+        try:
             numero = int(input("Número do pet: "))
-            pets[numero - 1].registrar_saida()
+
+            if 1 <= numer <= len(pets):
+                pets[numero - 1].registrar_saida()
+            else:
+                 print("Numero invalido")
+
+        except ValueError:
+            print("Digite apenas números.")
 
         elif opcao == "5":
             salvar_pets(pets)
