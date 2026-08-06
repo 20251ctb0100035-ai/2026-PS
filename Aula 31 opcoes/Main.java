@@ -2,7 +2,7 @@ Public class Main {
     public static void main(Strings[] args) {
         int[] valores = {8, 3, 10, 5, 12};
 
-        // Chamara cas=da metodo a partir do Nome da classe ou metodo
+        // Chamara casda metodo a partir do Nome da classe ou metodo
         System.out.println(calculaSoma.executar(valores));
         System.out.println(calculaMedia.executar(valores));
         System.out.println(menorValor.executar(valores));
