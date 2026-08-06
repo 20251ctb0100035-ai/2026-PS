@@ -7,17 +7,15 @@ public class Livro {  // o codigo faz um sistema de controle de biblioteca, perm
 
     // Construtor da classe Livro que inicializa os atributos com os valores fornecidos.
     public Livro(int isbn, String titulo, String autor, int disponivel) {
-        if (isbn >= 0) {
-            this.isbn = isbn;
-        }
-        if (titulo != null && !titulo.isBlank()) {
-            this.titulo = titulo;
-        }
-        if (autor != null && !autor.isBlank()) {
-            this.autor = autor;
-        }
+        setISBN(isbn);
+        setTitulo(titulo);
+        setAutor(autor);
+
+        // VALIDACAO DA Quantidade do construtor
         if (disponivel >= 0) {
             this.disponivel = disponivel;
+        } else {
+            this.disponivel = 0; // Se a quantidade fornecida for negativa, inicializa como 0
         }
     }
 
@@ -42,18 +40,24 @@ public class Livro {  // o codigo faz um sistema de controle de biblioteca, perm
     public void setISBN(int isbn) {
         if (isbn >= 0) { // Validação para garantir que o ISBN seja um número não negativo
             this.isbn = isbn;
+        } else {
+            System.out.println("ISBN inválido. O ISBN deve ser um número não negativo.");
         }
     }
 
     public void setTitulo(String titulo) {
         if (titulo != null && !titulo.isBlank()) { // Validação para garantir que o título não seja nulo ou vazio
             this.titulo = titulo;
+        } else {
+            System.out.println("Título inválido. O título não pode ser nulo ou vazio.");
         }
     }
 
     public void setAutor(String autor) {
         if (autor != null && !autor.isBlank()) { // Validação para garantir que o autor não seja nulo ou vazio
             this.autor = autor;
+        } else {
+            System.out.println("Autor inválido. O autor não pode ser nulo ou vazio.");
         }
     }
 
