@@ -13,6 +13,7 @@ public class main {
     
     public static void main(String[] args) {
         Scanner teclado = new Scanner(System.in);
+
         ArrayList<Aluno> lista = new ArrayList<Aluno>();
 
         while (true) {
@@ -81,6 +82,14 @@ public class main {
     }
 
     static void listar(ArrayList<Aluno> lista) {
+    if (list.size() == 0) {
+        System.out.println("nenhum guardado");
+        return;
+    }
+    System.out.println(a.getMatricula() + " | " + agetNome() + " | " + a.getCurso());
+    for (int i = 0; i < lista.size(); i++) {
+        Aluno a = list.get(i);
+    }
         if (list.size() == 0) {
             System.out.println("nenhum guardado");
             return;
