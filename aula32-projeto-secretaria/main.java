@@ -36,18 +36,6 @@ public class main {
                 cadastrar(lista, teclado);
             } else if (opcao.equals("2")) {
                 listar(lista);
-            } else{
-                System.out.println("Opcao invalida! Vale 0, 1 ou 2");
-            }
-        }
-    }
-
-    static void cadastrar(ArrayList<Aluno> lista, Scanner teclado) {
-        System.out.print("Nome: ");
-        String nome = teclado.nextLine().trim();
-
-        System.out.print("Matricula: ");
-        int Matricula = teclado.nextLine().trim();
             } else if (opcao.equals("3")) {
                 buscar(lista, teclado);
             } else if (opcao.equals("4")) {
