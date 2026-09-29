@@ -11,6 +11,7 @@ public class Leitor extends Usuario {
     private int limiteEmprestimos;
     private int livrosEmMaos;   // nao estava na caixa: o codigo pediu
 
+
     public Leitor(String nome, String matricula, int limiteEmprestimos) {
         super(nome, matricula); // primeiro a parte de Usuario, depois a de Leitor
         this.limiteEmprestimos = limiteEmprestimos;

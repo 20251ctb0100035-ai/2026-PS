@@ -44,9 +44,13 @@ A Bibliotech é um sistem de controle de acervo para a Dona Marli que resolve o 
 ​
 ### Classes
 ​
+<<<<<<< HEAD
 ![Diagrama de classes do BiblioTech](docs/classes.svg)
 
 ## 5. O que o codigo devolveu ao diagrama (Aula 37)
 
 - Livro ganhou o atributo disponivel: boolean, porque estaDisponivel() precisa guardar o estado.
 - Leitor ganhou livrosEmMaos: int, porque podePegarEmprestado() compara com o limite.
+=======
+![Diagrama de classes do BiblioTech](docs/classes.svg)
+>>>>>>> ad353f0b0496f29df9332c6f7b1db6d6d140e4c3

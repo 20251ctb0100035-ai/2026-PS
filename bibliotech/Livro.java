@@ -19,7 +19,6 @@ public class Livro {
         this.ano = ano;
         this.disponivel = true; // todo livro nasce na estante
     }
-
     // GETTERS: as janelas de leitura.
     public String getTitulo() {
         return titulo;

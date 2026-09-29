@@ -13,6 +13,10 @@ public class main {
     
     public static void main(String[] args) {
         Scanner teclado = new Scanner(System.in);
+<<<<<<< HEAD
+=======
+
+>>>>>>> ad353f0b0496f29df9332c6f7b1db6d6d140e4c3
         ArrayList<Aluno> lista = new ArrayList<Aluno>();
 
         while (true) {
@@ -81,6 +85,17 @@ public class main {
     }
 
     static void listar(ArrayList<Aluno> lista) {
+<<<<<<< HEAD
+=======
+    if (list.size() == 0) {
+        System.out.println("nenhum guardado");
+        return;
+    }
+    System.out.println(a.getMatricula() + " | " + agetNome() + " | " + a.getCurso());
+    for (int i = 0; i < lista.size(); i++) {
+        Aluno a = list.get(i);
+    }
+>>>>>>> ad353f0b0496f29df9332c6f7b1db6d6d140e4c3
         if (list.size() == 0) {
             System.out.println("nenhum guardado");
             return;
