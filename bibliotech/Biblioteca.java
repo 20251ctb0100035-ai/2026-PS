@@ -48,17 +48,35 @@ public class Biblioteca {
         }
         return null;
     }
-}
 
     // Acha os dois pelo texto, cria o registro e so arquiva se deu certo.
     public boolean emprestar(String titulo, String matricula) {
         Livro livro = buscarLivro(titulo);
         Leitor leitor = buscarLeitor(matricula);
-        Emprestimo novo = new Emprestimo(livro, leitor);
-        if (!novo.realizarEmprestimo()) {
+        if (livro == null || leitor == null) {
             return false;
         }
 
+        Emprestimo novo = new Emprestimo(livro, leitor);
+
     emprestimos.add(novo);
     return true;
+    }
+
+    // Procura o emprestimo ATIVO daquele titulo. O registro continua
+    public boolean devolver(String titulo) {
+        for (int i = 0; i <emprestimos.size(); i++){
+            Emprestimo e = emprestimos.get(i);
+            if (e.estaAtivo() && e.getLivro().getTitulo().equals(titulo)) {
+                return e.registrarDevolucao();
+            }
+        } 
+        return false;
+    }
+
+    public void listarEmprestimos() {
+        for (int i = 0; i < emprestimos.size(); i++) {
+            System.out.println(emprestimos.get(i));
+        }
+    }
 }

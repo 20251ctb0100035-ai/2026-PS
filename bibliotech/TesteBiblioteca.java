@@ -13,5 +13,14 @@ public class TesteBiblioteca {
         System.out.println("Acha: " + biblioteca.buscarLivro("Dom Casmurro"));
         System.out.println("Nao Acha: " + biblioteca.buscarLivro("O Cortico"));
         System.out.println("Leitor: " + biblioteca.buscarLeitor("2026011"));
+
+        System.out.println("Pedro pega Dom Casmurro: "
+            + biblioteca.emprestar("Dom Casmurro", "2026010"));
+        System.out.println("Ana tenta o mesmo livor: "
+            + biblioteca.emprestar("Dom Casmurro", "2026011"));
+        System.out.println("Pedro acima do limite: "
+            + biblioteca.emprestar("Capitaes da Areia", "2026010"));
+        System.out.println("Livro que nao existe: "
+            + biblioteca.emprestar("O Cortico", "2026011"));
     }
 }
