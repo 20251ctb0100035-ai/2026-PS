@@ -44,13 +44,38 @@ A Bibliotech é um sistem de controle de acervo para a Dona Marli que resolve o 
 ​
 ### Classes
 ​
-<<<<<<< HEAD
 ![Diagrama de classes do BiblioTech](docs/classes.svg)
 
 ## 5. O que o codigo devolveu ao diagrama (Aula 37)
 
 - Livro ganhou o atributo disponivel: boolean, porque estaDisponivel() precisa guardar o estado.
 - Leitor ganhou livrosEmMaos: int, porque podePegarEmprestado() compara com o limite.
-=======
-![Diagrama de classes do BiblioTech](docs/classes.svg)
->>>>>>> ad353f0b0496f29df9332c6f7b1db6d6d140e4c3
+
+## 6. Como executar
+
+No Codespace, dentro da pasta `bibliotech`:
+
+```
+javac *.java
+java TesteRequisitos
+java TelaBiblioteca
+```
+
+`TesteRequisitos confere os requisitos no terminal. `TelaBiblioteca abre a janela na area de trabalho do Codespace (porta 6080).
+
+## 7. Requisitos e verificacoes
+|
+# | Onde esta no codigo | Como verifico |
+| RF01 | `Biblioteca.cadastrarLivro()` | TesteRequisitos: 1 verificacao RF01 |
+| RF02 | `Biblioteca.cadastrarLeitor()` | TesteRequisitos: 1 verificacao RF02 |
+| RF03 | `Biblioteca.buscarLivro()` e `Livro.estaDisponivel()`; area do acervo na janela TesteRequisitos: 2 verificacoes RF03 |
+| RF04 | `Biblioteca.devolver()`, que chama Emprestimo.registrarDevolucao()`; botao Devolver | TesteRequisitos: 3 verificacoes RF04 |
+| RF05 | `Biblioteca.emprestar(), que chama Emprestimo.realizarEmprestimo()`; botao Emprestar | TesteRequisitos: 5 verificacoes RF05 |
+| RF06 | (o seu RF: onde esta, ou "ainda nao implementado") | (a verificacao, ou "sem verificacao") |
+
+## 8.0 que o BiblioTech ainda nao faz
+
+- HU05: ver os emprestimos atrasados. O emprestimo ainda nao tem prazo.
+-RNF02: qualquer pessoa que abre a janela pode emprestar e devolver; nao ha login de bibliotecario.
+-Cadastrar livro e leitor pela janela: hoje o cadastro esta no `main` de `TelaBiblioteca`
+-Guardar os dados: ao fechar o programa, os emprestimos se perdem.

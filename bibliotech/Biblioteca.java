@@ -26,6 +26,7 @@ public class Biblioteca {
         for (int i = 0; i < livros.size(); i++) {
             System.out.println(livros.get(i));
         }
+
     }
 
     // Devolve o livro achado, ou null se o titulo nao esta no acervo.
@@ -78,5 +79,18 @@ public class Biblioteca {
         for (int i = 0; i < emprestimos.size(); i++) {
             System.out.println(emprestimos.get(i));
         }
+    }
+
+        // Fornece uma descricao do acervo para a interface.
+    public String obterAcervoComoTexto() {
+        if (livros.isEmpty()) {
+            return "Nenhum livro cadastrado.";
+        }
+
+        String texto = "";
+        for (int i = 0; i < livros.size(); i++) {
+            texto = texto + livros.get(i) + "\n";
+        }
+        return texto;
     }
 }
