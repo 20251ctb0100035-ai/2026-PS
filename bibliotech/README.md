@@ -79,3 +79,21 @@ java TelaBiblioteca
 -RNF02: qualquer pessoa que abre a janela pode emprestar e devolver; nao ha login de bibliotecario.
 -Cadastrar livro e leitor pela janela: hoje o cadastro esta no `main` de `TelaBiblioteca`
 -Guardar os dados: ao fechar o programa, os emprestimos se perdem.
+
+## 9. Persistenci de Dados
+
+- **Banco de Dados Utilizados:** MySQL no GitHub Codespaces.
+- **Classe `Conexão`:** Estabelece a conexão JDBC com o banco de dados `biblioteh` de forma segura via variáveis de ambiente.
+- **Classe `LivroDAO`:** Padrão DAO (*Data Access Object*), responsável pelas operações de persistência na tabela `livros`.
+
+### Métodos Implementados (`LivroDAO`)
+- `adicionarLivro(titulo, autor, ano)`: Cadastra um novo livro na tabela `livros`.
+- `atualizarLivro(id, titulo, autor, ano)`: Altera os dados de um livro cadastrado pelo seu `id`.
+- `excluirLivro(id)`: Remove o registro do livro correspondente ao `id`.
+
+### Configuracao das Variaveis de Ambiente
+Para rodar a aplicacao com acesso ao banco, defina o usuario e a senha no terminal:
+
+```bash
+export DB_USER="seu_usuario"
+export DB_PASSWORD="sua_senha"
