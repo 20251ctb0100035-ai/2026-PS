@@ -6,49 +6,56 @@
  * Descricao : a caixa "Livro" do diagrama 
  */ 
 public class Livro {
-
-    // ATRIBUTOS: a faixa  do meio da caixa, um por linha, todos private.
+    private int id;
     private String titulo;
     private String autor;
     private int ano;
-    private boolean disponivel; // não estava na caixa: o código pediu
-    // CONSTRUTOR: preenche a ficha do livro no momento do "new".
+
+    // Construtor sem ID (utilizado para novos cadastros no banco)
     public Livro(String titulo, String autor, int ano) {
         this.titulo = titulo;
         this.autor = autor;
         this.ano = ano;
-        this.disponivel = true; // todo livro nasce na estante
     }
-    // GETTERS: as janelas de leitura.
+
+    // Construtor com ID (utilizado ao buscar/listar dados do MariaDB)
+    public Livro(int id, String titulo, String autor, int ano) {
+        this.id = id;
+        this.titulo = titulo;
+        this.autor = autor;
+        this.ano = ano;
+    }
+
+    // Getters e Setters
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getTitulo() {
         return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
     public String getAutor() {
         return autor;
     }
 
+    public void setAutor(String autor) {
+        this.autor = autor;
+    }
+
     public int getAno() {
         return ano;
     }
 
-    // OPERACAO DA CAIXA: estaDisponivel(), a faixa de baixo do diagrama.
-    public boolean estaDisponivel() {
-        return disponivel;
-    }
-
-    // Os dois metodos que o emprestimo vai usar na Aula 38.
-    public void emprestar() {
-        this.disponivel = false;
-    }
-
-    public void devolver() {
-        this.disponivel = true;
-    }
-
-    // toString: como a ficha se apresanta (Aula 34).
-    public String toString() {
-        String situacao = this.disponivel ? "disponivel" : "emprestado";
-        return this.titulo + " ("+ this.autor +", "+ Integer.toString(this.ano) +") - " + situacao;
+    public void setAno(int ano) {
+        this.ano = ano;
     }
 }
