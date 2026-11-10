@@ -16,6 +16,8 @@ public class TesteLivroDAO {
 
     dao.atualizarLivro(IDAtualizar, "Dom Casmurro - speciel edition", "Machado de Assis", 1899);
     dao.excluirLivro(IDExcluir);
+    dao.atualizarLivro(IDAtualizar, "Dom Casmurro - speciel edition", "Machado de Assis", 1899);
+    dao.excluirLivro(IDExcluir);
 
     System.out.println("Teste adicional — Registro inexistente");
     boolean atualizou = dao.atualizarLivro(
