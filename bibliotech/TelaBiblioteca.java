@@ -5,18 +5,20 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.*;
 import java.awt.*;
 import java.io.File;
-import java.nio.file.*;
+import java.io.IOException;
 import java.util.List;
 
 public class TelaBiblioteca extends JFrame {
     private JTable tabela;
     private DefaultTableModel modelo;
-    private JTextField campoBusca = new JTextField(16);
+    private JTextField campoBusca = new JTextField(12);
+    private JTextField campoId = new JTextField(4);
+    private JLabel status = new JLabel("Pronto.");
     private LivroDAO dao = new LivroDAO();
 
     public TelaBiblioteca() {
         setTitle("BiblioTech - Gerenciamento");
-        setSize(760, 500);
+        setSize(850, 520);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -28,16 +30,22 @@ public class TelaBiblioteca extends JFrame {
         // Topo personalizado
         JPanel topo = new JPanel(new FlowLayout(FlowLayout.LEFT));
         topo.setBackground(new Color(30, 58, 138));
-        JLabel lbl = new JLabel("Pesquisar:");
+        
+        JLabel lbl = new JLabel("Título:");
         lbl.setForeground(Color.WHITE);
         JButton btnBuscar = new JButton("Buscar");
+        
+        JLabel lblId = new JLabel("ID:");
+        lblId.setForeground(Color.WHITE);
+        JButton btnBuscarId = new JButton("Buscar ID");
+
         JButton btnTodos = new JButton("Todos");
         JButton btnCapa = new JButton("Selecionar capa");
         JButton btnNovo = new JButton("Novo Livro");
 
-        topo.add(lbl); topo.add(campoBusca);
-        topo.add(btnBuscar); topo.add(btnTodos);
-        topo.add(btnCapa); topo.add(btnNovo);
+        topo.add(lbl); topo.add(campoBusca); topo.add(btnBuscar);
+        topo.add(lblId); topo.add(campoId); topo.add(btnBuscarId);
+        topo.add(btnTodos); topo.add(btnCapa); topo.add(btnNovo);
         root.add(topo, BorderLayout.NORTH);
 
         // Tabela com coluna Capa
@@ -62,8 +70,10 @@ public class TelaBiblioteca extends JFrame {
         });
 
         root.add(new JScrollPane(tabela), BorderLayout.CENTER);
+        root.add(status, BorderLayout.SOUTH);
 
-        btnBuscar.addActionListener(e -> atualizarTabela(dao.buscarLivrosPorTitulo(campoBusca.getText().trim())));
+        btnBuscar.addActionListener(e -> buscarPorTitulo());
+        btnBuscarId.addActionListener(e -> buscarPorId());
         btnTodos.addActionListener(e -> carregarLivros());
         btnCapa.addActionListener(e -> selecionarCapa());
         btnNovo.addActionListener(e -> new TelaCadastroLivro(this).setVisible(true));
@@ -71,8 +81,68 @@ public class TelaBiblioteca extends JFrame {
         carregarLivros();
     }
 
+    private void buscarPorTitulo() {
+        try {
+            List<Livro> livros = dao.buscarLivrosPorTitulo(campoBusca.getText().trim());
+            atualizarTabela(livros);
+            status.setText("Livros encontrados: " + livros.size());
+        } catch (PersistenciaException e) {
+            tratarErroBanco(e);
+        }
+    }
+
+    private void buscarPorId() {
+        String texto = campoId.getText().trim();
+        int id;
+
+        try {
+            id = Integer.parseInt(texto);
+            if (id <= 0) {
+                throw new IllegalArgumentException("O ID deve ser positivo.");
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Informe um número inteiro válido.");
+            return;
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+            return;
+        }
+
+        try {
+            Livro livro = dao.buscarLivroPorId(id);
+            modelo.setRowCount(0);
+            if (livro != null) {
+                modelo.addRow(new Object[]{livro.getId(), carregarMiniatura(livro.getCapa()), livro.getTitulo(), livro.getAutor(), livro.getAno()});
+                status.setText("Livro encontrado.");
+            } else {
+                status.setText("Nenhum livro com ID " + id);
+            }
+        } catch (PersistenciaException e) {
+            tratarErroBanco(e);
+        }
+    }
+
     public void carregarLivros() {
-        atualizarTabela(dao.listarLivros());
+        try {
+            List<Livro> livros = dao.listarLivros();
+            atualizarTabela(livros);
+            status.setText("Livros encontrados: " + livros.size());
+        } catch (PersistenciaException e) {
+            tratarErroBanco(e);
+        }
+    }
+
+    private void tratarErroBanco(PersistenciaException e) {
+        status.setText("Erro ao consultar o banco.");
+        System.err.println(e.getMessage());
+        e.printStackTrace();
+
+        JOptionPane.showMessageDialog(
+            this,
+            "Não foi possível carregar os livros. Verifique a conexão com o MariaDB.",
+            "Erro de conexão",
+            JOptionPane.ERROR_MESSAGE
+        );
     }
 
     private void atualizarTabela(List<Livro> livros) {
@@ -107,8 +177,11 @@ public class TelaBiblioteca extends JFrame {
                 carregarLivros();
                 JOptionPane.showMessageDialog(this, "Capa salva!");
             }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Não foi possível salvar a imagem.", "Erro", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        } catch (PersistenciaException ex) {
+            tratarErroBanco(ex);
         }
     }
 

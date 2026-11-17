@@ -1,118 +1,151 @@
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LivroDAO {
 
-    public void inserir(Livro livro) {
-        String sql = "INSERT INTO livros (titulo, autor, ano, capa) VALUES (?, ?, ?, ?)";
-        try (Connection c = Conexao.conectar(); PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setString(1, livro.getTitulo());
-            ps.setString(2, livro.getAutor());
-            ps.setInt(3, livro.getAno());
-            ps.setString(4, livro.getCapa());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Erro ao inserir: " + e.getMessage());
-        }
-    }
-
     public boolean adicionarLivro(String titulo, String autor, int ano) {
         String sql = "INSERT INTO livros (titulo, autor, ano) VALUES (?, ?, ?)";
-        try (Connection c = Conexao.conectar(); PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setString(1, titulo);
-            ps.setString(2, autor);
-            ps.setInt(3, ano);
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            System.out.println("Erro ao adicionar livro: " + e.getMessage());
-            return false;
-        }
-    }
 
-    public List<Livro> listarLivros() {
-        List<Livro> lista = new ArrayList<>();
-        String sql = "SELECT id, titulo, autor, ano, capa FROM livros ORDER BY titulo";
-        try (Connection c = Conexao.conectar(); PreparedStatement ps = c.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                Livro l = new Livro(rs.getInt("id"), rs.getString("titulo"), rs.getString("autor"), rs.getInt("ano"));
-                l.setCapa(rs.getString("capa"));
-                lista.add(l);
-            }
-        } catch (SQLException e) {
-            System.out.println("Erro ao listar: " + e.getMessage());
-        }
-        return lista;
-    }
+        try (Connection conexao = Conexao.conectar();
+             PreparedStatement comando = conexao.prepareStatement(sql)) {
 
-    public Livro buscarLivroPorId(int id) {
-        String sql = "SELECT id, titulo, autor, ano, capa FROM livros WHERE id = ?";
-        try (Connection c = Conexao.conectar(); PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    Livro l = new Livro(rs.getInt("id"), rs.getString("titulo"), rs.getString("autor"), rs.getInt("ano"));
-                    l.setCapa(rs.getString("capa"));
-                    return l;
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println("Erro ao buscar por ID: " + e.getMessage());
-        }
-        return null;
-    }
+            comando.setString(1, titulo);
+            comando.setString(2, autor);
+            comando.setInt(3, ano);
 
-    public List<Livro> buscarLivrosPorTitulo(String termo) {
-        List<Livro> lista = new ArrayList<>();
-        String sql = "SELECT id, titulo, autor, ano, capa FROM livros WHERE titulo LIKE ? ORDER BY titulo";
-        try (Connection c = Conexao.conectar(); PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setString(1, "%" + termo + "%");
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    Livro l = new Livro(rs.getInt("id"), rs.getString("titulo"), rs.getString("autor"), rs.getInt("ano"));
-                    l.setCapa(rs.getString("capa"));
-                    lista.add(l);
-                }
-            }
+            return comando.executeUpdate() > 0;
+
         } catch (SQLException e) {
-            System.out.println("Erro na busca: " + e.getMessage());
+            throw new PersistenciaException("Não foi possível adicionar o livro.", e);
         }
-        return lista;
     }
 
     public boolean atualizarLivro(int id, String titulo, String autor, int ano) {
         String sql = "UPDATE livros SET titulo = ?, autor = ?, ano = ? WHERE id = ?";
-        try (Connection c = Conexao.conectar(); PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setString(1, titulo);
-            ps.setString(2, autor);
-            ps.setInt(3, ano);
-            ps.setInt(4, id);
-            return ps.executeUpdate() > 0;
+
+        try (Connection conexao = Conexao.conectar();
+             PreparedStatement comando = conexao.prepareStatement(sql)) {
+
+            comando.setString(1, titulo);
+            comando.setString(2, autor);
+            comando.setInt(3, ano);
+            comando.setInt(4, id);
+
+            return comando.executeUpdate() > 0;
+
         } catch (SQLException e) {
-            System.out.println("Erro ao atualizar livro: " + e.getMessage());
-            return false;
+            throw new PersistenciaException("Não foi possível atualizar o livro.", e);
         }
     }
 
     public boolean excluirLivro(int id) {
         String sql = "DELETE FROM livros WHERE id = ?";
-        try (Connection c = Conexao.conectar(); PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            return ps.executeUpdate() > 0;
+
+        try (Connection conexao = Conexao.conectar();
+             PreparedStatement comando = conexao.prepareStatement(sql)) {
+
+            comando.setInt(1, id);
+            return comando.executeUpdate() > 0;
+
         } catch (SQLException e) {
-            System.out.println("Erro ao excluir livro: " + e.getMessage());
-            return false;
+            throw new PersistenciaException("Não foi possível excluir o livro.", e);
         }
     }
 
-    public boolean atualizarCapa(int id, String caminho) {
-        String sql = "UPDATE livros SET capa = ? WHERE id = ?";
-        try (Connection c = Conexao.conectar(); PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setString(1, caminho);
-            ps.setInt(2, id);
-            return ps.executeUpdate() > 0;
+    public List<Livro> listarLivros() {
+        List<Livro> lista = new ArrayList<>();
+        String sql = "SELECT id, titulo, autor, ano, capa FROM livros";
+
+        try (Connection conexao = Conexao.conectar();
+             PreparedStatement comando = conexao.prepareStatement(sql);
+             ResultSet rs = comando.executeQuery()) {
+
+            while (rs.next()) {
+                Livro l = new Livro(
+                    rs.getInt("id"),
+                    rs.getString("titulo"),
+                    rs.getString("autor"),
+                    rs.getInt("ano")
+                );
+                l.setCapa(rs.getString("capa"));
+                lista.add(l);
+            }
+            return lista;
+
         } catch (SQLException e) {
-            System.out.println("Erro ao atualizar capa: " + e.getMessage());
-            return false;
+            throw new PersistenciaException("Não foi possível consultar os livros.", e);
+        }
+    }
+
+    public List<Livro> buscarLivrosPorTitulo(String titulo) {
+        List<Livro> lista = new ArrayList<>();
+        String sql = "SELECT id, titulo, autor, ano, capa FROM livros WHERE titulo LIKE ?";
+
+        try (Connection conexao = Conexao.conectar();
+             PreparedStatement comando = conexao.prepareStatement(sql)) {
+
+            comando.setString(1, "%" + titulo + "%");
+            try (ResultSet rs = comando.executeQuery()) {
+                while (rs.next()) {
+                    Livro l = new Livro(
+                        rs.getInt("id"),
+                        rs.getString("titulo"),
+                        rs.getString("autor"),
+                        rs.getInt("ano")
+                    );
+                    l.setCapa(rs.getString("capa"));
+                    lista.add(l);
+                }
+            }
+            return lista;
+
+        } catch (SQLException e) {
+            throw new PersistenciaException("Não foi possível buscar os livros.", e);
+        }
+    }
+
+    public Livro buscarLivroPorId(int id) {
+        String sql = "SELECT id, titulo, autor, ano, capa FROM livros WHERE id = ?";
+
+        try (Connection conexao = Conexao.conectar();
+             PreparedStatement comando = conexao.prepareStatement(sql)) {
+
+            comando.setInt(1, id);
+            try (ResultSet rs = comando.executeQuery()) {
+                if (rs.next()) {
+                    Livro l = new Livro(
+                        rs.getInt("id"),
+                        rs.getString("titulo"),
+                        rs.getString("autor"),
+                        rs.getInt("ano")
+                    );
+                    l.setCapa(rs.getString("capa"));
+                    return l;
+                }
+            }
+            return null;
+
+        } catch (SQLException e) {
+            throw new PersistenciaException("Não foi possível buscar o livro por ID.", e);
+        }
+    }
+
+    public boolean atualizarCapa(int id, String caminhoCapa) {
+        String sql = "UPDATE livros SET capa = ? WHERE id = ?";
+
+        try (Connection conexao = Conexao.conectar();
+             PreparedStatement comando = conexao.prepareStatement(sql)) {
+
+            comando.setString(1, caminhoCapa);
+            comando.setInt(2, id);
+            return comando.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            throw new PersistenciaException("Não foi possível atualizar a capa.", e);
         }
     }
 }
